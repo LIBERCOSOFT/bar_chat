@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="./style.css" />
+<title>Bar Chart</title>
+<script src="https://d3js.org/d3.v4.js"></script>
+</head>
+
+
+<body>
+
+        <div id="home"></div>
+
+<script>
+    //Javascript element getting the data from a .json link
+    document.addEventListener('DOMContentLoaded',function(){
+        req=new XMLHttpRequest();
+        req.open("GET",'https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json',true);
+        req.send();
+        req.onload=function(){
+            json=JSON.parse(req.responseText);
+            let data = json.data;
+            let rawData = [];
+            data.map(function(val){rawData.push(val[1] / 40)});
+            
+            let years = [1950]
+            while (years[years.length - 1] != 2015){
+	            years.push(years[years.length - 1] + 5);
+            }
+
+            d3.select("#home")
+              .append("H1")
+              .text("UNITED STATE GDP")
+
+            const w = 900;
+            const h = 650;
+
+            const svg = d3.select("#home")
+                          .append("svg")
+                          .attr("width", w)
+                          .attr("height", h)
+
+            //All X-Scale preferences
+            const xScale = d3.scaleBand()
+                             .domain(years)
+                             .range([10, 835])
+                             .padding(0.5)
+            const xAxis = d3.axisBottom(xScale);
+            svg.append("g")
+               .attr("transform", "translate(32, 600)")
+               .call(xAxis)
+            
+            //All Y-Scale preferences
+            const yScale = d3.scaleLinear()
+                             .domain([18000, 0])
+                             .range([0, 450])
+            const yAxis = d3.axisLeft(yScale);
+            svg.append("g")
+               .attr("transform", "translate(42, 150)")
+               .call(yAxis)
+            svg.append("text")
+               .attr("text-anchor", "end")
+               .attr("transform", "rotate(-90)")
+               .attr("x", -200)
+               .attr("y", 60)
+               .text("Gross Domestic Product")
+
+            svg.selectAll("rect")
+               .data(rawData)
+               .enter()
+               .append("rect")
+               .attr("x", (d, i) => i * 3)
+               .attr("y", (d, i) => h - d)
+               .attr("width", 2.7)
+               .attr("height", (d) =>  d)
+               .attr("class", "bar")
+               .attr("transform", "translate(43, -50)")
+               .append("title")
+               .text((d) => "$" + (d * 40).toFixed(1) + " Billion")
+            d3.select("#home")
+              .append("P")
+              .text("More Information: http://www.bea.gov/national/pdf/nipaguid.pdf")
+        };
+    });
+
+</script>
+
+
+</body>

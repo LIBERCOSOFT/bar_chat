@@ -1,0 +1,29 @@
+body{
+    background-color: grey;
+}
+
+#home{
+    background-color: whitesmoke;
+    width: 900px;
+    height: 650px;
+    margin: 0 auto;
+}
+
+#home h1{
+    margin-bottom: -100px;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.bar{
+    fill: dodgerblue;
+}
+
+.bar:hover {
+    fill: white
+}
+
+p{
+    float: right;
+    margin: -10px 40px 0px 0px;
+}
